@@ -5,7 +5,7 @@ const calculatePrice = require("../utils/prodPriceCalc");
 const getAllProducts = async (req, res, next) => {
     try {
         const fetchAllProducts = await pool.query(
-        `
+            `
             SELECT *
             FROM Products
         `,
@@ -31,7 +31,7 @@ const getProductDetails = async (req, res, next) => {
 
     try {
         const prodDetails = await pool.query(
-        `
+            `
             SELECT *
             FROM Products
             WHERE Prod_Id = $1
@@ -71,8 +71,8 @@ const calculateProductPricing = async (req, res, next) => {
 
         if (productRes.rows.length === 0) {
             return res.status(404).json({
-                status: false, 
-                message: "Product does not exists based on provided Id" 
+                status: false,
+                message: "Product does not exists based on provided Id"
             });
         }
 
@@ -129,18 +129,33 @@ const calculateProductPricing = async (req, res, next) => {
         const tax = pricingRes.rows[0]?.tax_percentage || 0;
         const discount = pricingRes.rows[0]?.exchange_discount || 0;
 
-        // 5. Calculation
+        // 5. Purity Percentage
+        const purityRes = await pool.query(
+            `
+                SELECT p.Prod_base_weight, m.Metal_PricePerGram, pl.purity_percentage
+                FROM Inventory AS i
+                JOIN Products AS p ON p.Prod_Id = i.product_id
+                JOIN Metals AS m ON m.Metal_Id = i.metal_id
+                JOIN Purity_Levels AS pl ON pl.id = i.purity_id
+                WHERE p.Prod_Id = $1;
+            `,
+            [payload.prodId]
+        );
 
+        const purityPercentage = purityRes.rows[0]?.purity_percentage || 0;
+
+        // 6. Calculation
         const priceDetails = calculatePrice({
             metalPricePerGram,
             baseWeight: prodBaseWeight,
             makingCharges: Number(prodMakingCharges),
+            purityPercentage,
             diamondPricePerCarat,
             diamondCarat,
             taxPercentage: tax,
             exchangeDiscount: Number(discount)
         });
-        
+
         res.status(200).json({
             success: true,
             priceDetails

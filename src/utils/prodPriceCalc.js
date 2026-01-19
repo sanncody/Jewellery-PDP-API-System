@@ -18,6 +18,7 @@ const calculatePrice = ({
     metalPricePerGram,
     baseWeight,
     makingCharges,
+    purityPercentage,
     diamondPricePerCarat,
     diamondCarat,
     taxPercentage,
@@ -25,7 +26,7 @@ const calculatePrice = ({
 }) => {
 
     // Metal price
-    const metalCost = metalPricePerGram * baseWeight;
+    const metalCost = metalPricePerGram * baseWeight * purityPercentage;
 
     // Diamond price
     const diamondCost = diamondPricePerCarat * diamondCarat;
@@ -41,6 +42,7 @@ const calculatePrice = ({
 
     return {
         metalCost,
+        purityFactor: `${purityPercentage}%`,
         diamondCost,
         makingCharges,
         basePrice,
