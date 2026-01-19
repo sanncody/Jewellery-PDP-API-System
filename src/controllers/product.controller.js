@@ -1,11 +1,52 @@
-const { Pool } = require("pg");
 const pool = require("../config/db");
 const calculatePrice = require("../utils/prodPriceCalc");
+
+const createProduct = async (req, res, next) => {
+    const { 
+        name,
+        description,
+        baseWeight,
+        makingCharges,
+        isBISHallmarked,
+        isGIACertified
+    } = req.body;
+
+    if (!name || !baseWeight || !makingCharges) {
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    try {
+        const createdProd = await pool.query(
+            `
+                INSERT INTO Products 
+                (Prod_Name, Prod_Description, Prod_base_weight, Prod_making_charges, is_BIS_hallmarked, is_GIA_certified)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING *
+            `,
+            [
+                name,
+                description,
+                baseWeight,
+                makingCharges,
+                isBISHallmarked,
+                isGIACertified
+            ]
+        );
+
+        res.status(201).json({
+            success: true,
+            prodDetails: createdProd.rows[0]
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}; 
 
 const getAllProducts = async (req, res, next) => {
     try {
         const fetchAllProducts = await pool.query(
-            `
+        `
             SELECT *
             FROM Products
         `,
@@ -31,7 +72,7 @@ const getProductDetails = async (req, res, next) => {
 
     try {
         const prodDetails = await pool.query(
-            `
+        `
             SELECT *
             FROM Products
             WHERE Prod_Id = $1
@@ -106,12 +147,12 @@ const calculateProductPricing = async (req, res, next) => {
         );
 
 
-        if (diamondRes.rows.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "There is no matching data with provided Product Id"
-            });
-        }
+        // if (diamondRes.rows.length === 0) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "There is no matching data with provided Product Id"
+        //     });
+        // }
 
         const diamondCarat = diamondRes.rows[0]?.diamond_carat || 0;
         const diamondPricePerCarat = diamondRes.rows[0]?.diamond_price_per_carat || 0;
@@ -165,8 +206,63 @@ const calculateProductPricing = async (req, res, next) => {
     }
 };
 
+const checkProdAvailability = async (req, res, next) => {
+    // We need to check that: For Selected product + metal + purity + ring size, does the stock available or not?
+    // We'll fetch data from inventory table as product must be available in inventory anyway
+    console.log(req.query);
+    const { prodId, metalId, purityId, ringSizeId } = req.query;
+    console.log(prodId, metalId, purityId, ringSizeId);
+    if (!prodId || !metalId || !purityId || !ringSizeId) {
+        return res.status(400).json({
+            status: false,
+            message: "All selected parameters are required"
+        })
+    }
+
+    try {
+        const inventoryRes = await pool.query(
+            `
+                SELECT quantity
+                FROM Inventory
+                WHERE product_id = $1
+                    AND metal_id = $2
+                    AND purity_id = $3
+                    AND ring_size_id = $4
+            `,
+            [prodId, metalId, purityId, ringSizeId]
+        );
+
+        // Unsupportive combination
+        if (inventoryRes.rows.length === 0) {
+            return res.status(400).json({
+                availablity: false,
+                message: "The combination of multiple inventory factors is not supported" 
+            });
+        }
+
+        const quantity = inventoryRes.rows[0].quantity;
+
+        if (quantity <= 0) {
+            return res.status(200).json({
+                availablity: false,
+                message: "Product is Out of Stock"
+            });
+        }
+
+        res.status(200).json({
+            availability: true,
+            quantity
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
-    calculateProductPricing,
+    createProduct,
     getAllProducts,
-    getProductDetails
+    getProductDetails,
+    calculateProductPricing,
+    checkProdAvailability
 };
