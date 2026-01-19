@@ -6,8 +6,8 @@ const app = require('./src/app');
 
 /* Testing Connection */
 app.get('/', async (req, res) => {
-    const result = await pg.query("SELECT current_database()");
-    res.send(result);
+    const result = await pg.query("SELECT * FROM Metals");
+    res.send(result.rows);
     // res.send(`The database name is ${result.rows[0].current_database}`)
 });
 

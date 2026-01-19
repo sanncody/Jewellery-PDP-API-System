@@ -4,5 +4,7 @@ CREATE TABLE Products (
     Prod_Description TEXT,
     Prod_base_weight DECIMAL(10, 2),
     Prod_making_charges DECIMAL(10, 2),
-    is_available BOOLEAN DEFAULT true
+    is_available BOOLEAN DEFAULT TRUE,
+    is_BIS_hallmarked BOOLEAN DEFAULT FALSE,
+    is_GIA_certified BOOLEAN DEFAULT FALSE
 );
