@@ -4,7 +4,7 @@ const productRoutes = require('./routes/product.routes');
 const metalRoutes = require('./routes/metal.routes');
 const diamondRoutes = require('./routes/diamond.routes');
 
-const errorHandlingMiddleware = require('./middlewares/error.middleware');
+const globalErrorHandler = require('./middlewares/globalErrorHandler.middleware');
 
 const app = express();
 
@@ -23,6 +23,6 @@ app.use('/api/diamonds', diamondRoutes);
 
 
 /* Error Handling Middleware */
-app.use(errorHandlingMiddleware);
+app.use(globalErrorHandler);
 
 module.exports = app;
