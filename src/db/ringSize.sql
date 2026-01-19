@@ -1,0 +1,4 @@
+CREATE TABLE Ring_Sizes (
+  Ring_Id SERIAL PRIMARY KEY,
+  Ring_Size INT NOT NULL
+);
