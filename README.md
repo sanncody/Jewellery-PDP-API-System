@@ -1,8 +1,6 @@
 # Jewellery PDP API System
 
-A backend API system designed to support a Jewellery Product Detail Page (PDP).
-
-The system handles **product information**, **metal & diamond customization**, **price calculation**, and **inventory-based availability checks** using **Node.js, Express, and PostgreSQL**.
+A backend API system designed to support a Jewellery Product Detail Page (PDP). The system handles **product information**, **metal & diamond customization**, **price calculation**, and **inventory-based availability checks** using **Node.js, Express, and PostgreSQL**.
 
 <br>
 
@@ -61,7 +59,7 @@ src/
 <br>
 
 ### 📌 Structure Highlights
----
+
 - **controllers/**  
   Contains all request handling and database interaction logic.
 
@@ -129,7 +127,7 @@ Note: Add .env file with variables in ``.env.example`` in root directory
 
 <br>
 
-## Why PostgreSQL over MongoDB?
+## 🤔 Why PostgreSQL over MongoDB?
 
 The jewellery product domain involves **highly structured data** and **clear relationships** between entities such as:
 
