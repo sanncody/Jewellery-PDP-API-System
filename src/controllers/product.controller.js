@@ -209,9 +209,9 @@ const calculateProductPricing = async (req, res, next) => {
 const checkProdAvailability = async (req, res, next) => {
     // We need to check that: For Selected product + metal + purity + ring size, does the stock available or not?
     // We'll fetch data from inventory table as product must be available in inventory anyway
-    console.log(req.query);
+
     const { prodId, metalId, purityId, ringSizeId } = req.query;
-    console.log(prodId, metalId, purityId, ringSizeId);
+
     if (!prodId || !metalId || !purityId || !ringSizeId) {
         return res.status(400).json({
             status: false,
@@ -243,7 +243,7 @@ const checkProdAvailability = async (req, res, next) => {
         const quantity = inventoryRes.rows[0].quantity;
 
         if (quantity <= 0) {
-            return res.status(200).json({
+            return res.status(400).json({
                 availablity: false,
                 message: "Product is Out of Stock"
             });

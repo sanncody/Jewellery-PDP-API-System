@@ -2,7 +2,7 @@
 
 /*
 Base Price =
-    (metal_price_per_gram * product_weight)
+    (metal_price_per_gram * product_weight * purityPercentage)
   + making_charges
   + (diamond_price_per_carat * diamond_carat)
 
