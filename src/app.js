@@ -8,7 +8,10 @@ const globalErrorHandler = require('./middlewares/globalErrorHandler.middleware'
 
 const app = express();
 
+
+
 app.use(express.json());
+
 
 /* Using Routes */
 
