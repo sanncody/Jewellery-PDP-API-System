@@ -1,0 +1,21 @@
+###
+POST http://localhost:3000/api/token/token-auth 
+Content-Type: application/json
+
+{
+    "id": "809890sdgsdkghklsdn", 
+    "name": "Dummy User"
+}
+
+### Metal GET Request
+GET http://localhost:3000/api/metals
+Content-Type: application/json
+
+### Products GET request
+GET http://localhost:3000/api/products
+Content-Type: application/json
+
+
+### Diamonds GET request
+GET http://localhost:3000/api/diamonds
+Content-Type: application/json
