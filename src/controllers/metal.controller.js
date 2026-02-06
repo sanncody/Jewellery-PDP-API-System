@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const jsonToCSVConverter = require("../utils/jsonToCSV");
 
 const createMetalInfo = async (req, res, next) => {
     const {
@@ -51,11 +52,14 @@ const getAllMetals = async (req, res, next) => {
         `,
         );
 
-        res.status(200).json({
-            success: true,
-            data: fetchAllMetals.rows
-        })
+        const csvConvertedData = await jsonToCSVConverter(fetchAllMetals.rows);
+        console.log(csvConvertedData);
+        res.header("Content-Type", "text/csv");
+        res.attachment("metals.csv");
+
+        return res.status(200).send(csvConvertedData);
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

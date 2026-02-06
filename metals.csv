@@ -1,0 +1,8 @@
+"metal_id","metal_name","metal_description","metal_purity","metal_color","metal_pricepergram","isalloy"
+1,"Gold","Pure gold used for coins and investment","24K","Yellow","6200.0000",false
+2,"Gold","Popular for traditional jewellery","22K","Yellow","5700.0000",true
+3,"Gold","Used for diamond jewellery","18K","Yellow","4800.0000",true
+4,"Silver","Sterling silver for ornaments","925","White","75.5000",true
+5,"Platinum","Premium metal for wedding bands","950","White","3200.0000",false
+6,"Palladium","Used in white gold alloys","950","White","2100.0000",false
+19,"Silver","Pure silver for coins","999","White","85.0000",false
