@@ -52,8 +52,8 @@ const getAllMetals = async (req, res, next) => {
         `,
         );
 
-        const csvConvertedData = await jsonToCSVConverter(fetchAllMetals.rows);
-        console.log(csvConvertedData);
+        const csvConvertedData = jsonToCSVConverter(fetchAllMetals.rows);
+
         res.header("Content-Type", "text/csv");
         res.attachment("metals.csv");
 

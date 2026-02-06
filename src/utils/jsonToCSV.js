@@ -1,7 +1,7 @@
 const { Parser } = require('json2csv');
 const fs = require('fs');
 
-const jsonToCSVConverter = async (jsonResponse) => {
+const jsonToCSVConverter = (jsonResponse) => {
     const parserObj = new Parser();
     const csvRes = parserObj.parse(jsonResponse);
 
